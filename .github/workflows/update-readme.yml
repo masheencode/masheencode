@@ -1,17 +1,16 @@
-name: 🚀 Professional GitHub profile automation
+name: 🚀 Code Masheen GitHub Automation
 
 on:
   schedule:
-    - cron: "0 6 * * *"   # runs daily at 6 AM UTC
-  workflow_dispatch:      # allows manual run
+    - cron: "0 6 * * *"
+  workflow_dispatch:
 
 jobs:
   update-readme:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -28,15 +27,14 @@ jobs:
         uses: jamesgeorge007/github-activity-readme@v0.4.0
         with:
           GH_USERNAME: masheencode
-          COMMIT_MSG: "chore: update recent GitHub activity"
           MAX_LINES: 5
 
-      - name: Commit & Push changes
+      - name: Commit & Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add README.md
-          git commit -m "docs: auto update README" || echo "No changes"
+          git commit -m "docs: update Code Masheen README" || echo "No changes"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
