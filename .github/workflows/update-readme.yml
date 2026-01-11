@@ -1,43 +1,43 @@
-name: 🚀 Code Masheen GitHub Automation
-
-permissions:
-  contents: write
+name: update-readme
 
 on:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: '0 0 * * *'  # runs daily at midnight
   workflow_dispatch:
 
 jobs:
   update-readme:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      # Step 1: Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
+      # Step 2: Setup Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: '3.x'
 
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # Step 4: Update README (Company Info)
       - name: Update README (Company Info)
         run: python scripts/update_readme.py
 
+      # Step 5: Update Recent GitHub Activity
       - name: Update Recent GitHub Activity
         uses: jamesgeorge007/github-activity-readme@v0.4.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          GH_USERNAME: masheencode
-          MAX_LINES: 5
+          GITHUB_TOKEN: ${{ secrets.README_PAT }}
 
+      # Step 6: Commit & Push
       - name: Commit & Push
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "you@example.com"
+          git config --local user.name "Your Name"
           git add README.md
-          git commit -m "docs: update Code Masheen README" || echo "No changes"
+          git commit -m "Update README"
           git push
