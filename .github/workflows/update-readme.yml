@@ -1,5 +1,8 @@
 name: 🚀 Code Masheen GitHub Automation
 
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: "0 6 * * *"
@@ -25,6 +28,8 @@ jobs:
 
       - name: Update Recent GitHub Activity
         uses: jamesgeorge007/github-activity-readme@v0.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           GH_USERNAME: masheencode
           MAX_LINES: 5
@@ -36,5 +41,3 @@ jobs:
           git add README.md
           git commit -m "docs: update Code Masheen README" || echo "No changes"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
